@@ -6,7 +6,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var rdp = require('node-rdpjs')
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -62,4 +62,33 @@ app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
+});
+var io = require('socket.io').listen(server);
+var connectionURL = "";
+io.on('connection', function (socket) {
+    console.log('a user connected');
+    socket.on('disconnect', function () {
+        console.log('user disconnected');
+    });
+    socket.on("newConnection", function (credentials) {
+        console.log(credentials);
+        connectionURL = credentials.server;
+        console.log(connectionURL);
+        var client = rdp.createClient({
+            domain: credentials.domain,
+            userName: credentials.username,
+            password: credentials.password,
+            enablePerf: true,
+            autoLogin: true,
+            decompress: false,
+            screen: { width: 800, height: 600 },
+            locale: 'en',
+            logLevel: 'INFO'
+        }).on('connect', function () {
+        }).on('close', function () {
+            }).on('bitmap', function (bitmap) {
+                socket.emit('bitmap',bitmap)
+        }).on('error', function (err) {
+        }).connect(connectionURL, 3389);
+    })
 });

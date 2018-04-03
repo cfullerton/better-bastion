@@ -6,3 +6,7 @@
 a {
     color: #00B7FF;
 }
+#rdpWindow {
+    width:800px;
+    height:600px;
+}

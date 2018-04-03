@@ -2,4 +2,15 @@
 
 block content
   h1= title
-  p Welcome to #{title}
+  label(for="domain") Domain
+  input(name="domain" id="domain" type="text")
+  label(for="server") Server Name
+  input(name="server" id="server" type="text")
+  label(for="username") User Name
+  input(name="username" id="username" type="text")
+  label(for="password") Password
+  input(name="password" id="password" type="password")
+  button#connect Connect
+  div#rdpWindow
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.dev.js")
+  script(src="/javascripts/rdp.js")
